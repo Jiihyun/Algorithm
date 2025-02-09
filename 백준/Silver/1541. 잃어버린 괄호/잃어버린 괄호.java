@@ -1,21 +1,20 @@
 import java.util.Scanner;
 
 public class Main {
-    static int answer = 0;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String example = sc.nextLine();
         String[] minusSplit = example.split("-");
-        for (int i = 0; i < minusSplit.length; i++) {
-            int totalPlus = getSum(minusSplit[i]);
-            if (i == 0) {
-                answer += totalPlus;
-            } else {
-                answer -= totalPlus;
-            }
+        int totalPlus = 0;
+        for (int i = 1; i < minusSplit.length; i++) {
+            totalPlus += getSum(minusSplit[i]);
         }
-        System.out.println(answer);
+        if (minusSplit.length == 1) {
+            System.out.println(getSum(minusSplit[0]));
+        } else {
+            System.out.println(getSum(minusSplit[0]) - totalPlus);
+        }
     }
 
     private static int getSum(final String minusSplit) {
