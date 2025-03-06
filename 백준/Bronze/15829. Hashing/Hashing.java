@@ -7,18 +7,16 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int L = Integer.parseInt(br.readLine());
         String str = br.readLine();
-        double[] arr = new double[L];
-        int pow = 0;
+        long result = 0;
+        long pow = 1;
+        final int MOD = 1234567891;
 
         for (int i = 0; i < str.length(); i++) {
-            int num = (str.charAt(i) - 'a') + 1;
-            arr[i] = num * Math.pow(31, pow);
-            pow += 1;
+            int num = (str.charAt(i) - 'a') + 1; 
+            result = (result + (num * pow) % MOD) % MOD; 
+            pow = (pow * 31) % MOD; 
         }
-        int sum = 0;
-        for (int i = 0; i < L; i++) {
-            sum += arr[i];
-        }
-        System.out.println(sum);
+
+        System.out.println(result);
     }
 }
