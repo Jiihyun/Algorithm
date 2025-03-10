@@ -1,8 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -10,38 +9,42 @@ public class Main {
         StringBuffer sb = new StringBuffer();
 
         int length = Integer.parseInt(br.readLine());
-        Set<Integer> set = new HashSet<>();
+        int set = 0;
         for (int i = 0; i < length; i++) {
-            String[] split = br.readLine().split(" ");
-            String command = split[0];
-            int num = -1;
-            if (split.length > 1) {
-                num = Integer.parseInt(split[1]);
-            }
-            if (command.equals("add")) {
-                set.add(num);
-            } else if (command.equals("remove")) {
-                set.remove(num);
-            } else if (command.equals("check")) {
-                if (set.contains(num)) {
-                    sb.append(1);
-                } else {
-                    sb.append(0);
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            String command = st.nextToken();
+            switch (command) {
+                case "add": {
+                    int num = Integer.parseInt(st.nextToken()) - 1;
+                    set |= (1 << num);
+                    break;
                 }
-                sb.append("\n");
-            } else if (command.equals("toggle")) {
-                if (set.contains(num)) {
-                    set.remove(num);
-                } else {
-                    set.add(num);
+                case "remove": {
+                    int num = Integer.parseInt(st.nextToken()) - 1;
+                    set &= ~(1 << num);
+                    break;
                 }
-            } else if (command.equals("all")) {
-                set = new HashSet<>();
-                for (int j = 1; j <= 20; j++) {
-                    set.add(j);
+                case "check": {
+                    int num = Integer.parseInt(st.nextToken()) - 1;
+                    if ((set & (1 << num)) != 0) {
+                        sb.append(1);
+                    } else {
+                        sb.append(0);
+                    }
+                    sb.append("\n");
+                    break;
                 }
-            } else if (command.equals("empty")) {
-                set.clear();
+                case "toggle": {
+                    int num = Integer.parseInt(st.nextToken()) - 1;
+                    set ^= (1 << num);
+                    break;
+                }
+                case "all":
+                    set = (1 << 20) - 1;
+                    break;
+                case "empty":
+                    set = 0;
+                    break;
             }
         }
         System.out.print(sb);
