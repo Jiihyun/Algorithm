@@ -3,51 +3,51 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
+        int size = Integer.parseInt(br.readLine());
         int spot = Integer.parseInt(br.readLine());
 
-        int[][] map = new int[n][n];
+        int[][] board = new int[size][size];
         int value = 1;
         int movement = 1;
-        int x = n / 2;
-        int y = n / 2;
+        int start = size / 2;
+        int x = start, y = start;
 
         while (true) {
             for (int i = 0; i < movement; i++) {
-                map[y--][x] = value++;
+                board[y--][x] = value++;
             }
-            if (value == n * n + 1) {
+            if (value == size * size + 1) {
                 break;
             }
             for (int i = 0; i < movement; i++) {
-                map[y][x++] = value++;
+                board[y][x++] = value++;
             }
             movement++;
             for (int i = 0; i < movement; i++) {
-                map[y++][x] = value++;
+                board[y++][x] = value++;
             }
             for (int i = 0; i < movement; i++) {
-                map[y][x--] = value++;
+                board[y][x--] = value++;
             }
             movement++;
         }
-
         StringBuilder sb = new StringBuilder();
-        int spotA = 0;
-        int spotB = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (spot == map[i][j]) {
-                    spotA = j + 1;
-                    spotB = i + 1;
+        int spotA = 0, spotB = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                sb.append(board[i][j]).append(" ");
+                if (board[i][j] == spot) {
+                    spotA = i + 1;
+                    spotB = j + 1;
                 }
-                sb.append(map[i][j] + " ");
             }
             sb.append("\n");
         }
-        sb.append(spotB + " " + spotA);
+        sb.append(spotA).append(" ").append(spotB);
         System.out.println(sb);
     }
 }
+
