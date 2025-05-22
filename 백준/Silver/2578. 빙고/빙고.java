@@ -4,7 +4,6 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int count = 0;
     static int[][] board = new int[5][5];
 
     public static void main(String[] args) throws IOException {
@@ -16,35 +15,34 @@ public class Main {
                 board[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-        int answer = 0;
+        int count = 0;
         for (int i = 0; i < 5; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int j = 0; j < 5; j++) {
-                answer++;
+                count++;
                 erase(Integer.parseInt(st.nextToken()));
-                check();
-                if (count >= 3) {
-                    System.out.println(answer);
+                int bingo = checkBingo();
+                if (bingo >= 3) {
+                    System.out.println(count);
                     return;
                 }
             }
         }
     }
 
-    private static void erase(final int num) {
+    private static void erase(int num) {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (board[i][j] == num) {
-                    board[i][j] = -1;
+                    board[i][j] = 0;
                     break;
                 }
             }
         }
     }
 
-    private static void check() {
-        count = 0;
-
+    private static int checkBingo() {
+        int bingo = 0;
         for (int i = 0; i < 5; i++) {
             int row = 0;
             int col = 0;
@@ -52,27 +50,25 @@ public class Main {
                 row += board[i][j];
                 col += board[j][i];
             }
-
-            if (row == -5) {
-                count++;
+            if (row == 0) {
+                bingo++;
             }
-            if (col == -5) {
-                count++;
+            if (col == 0) {
+                bingo++;
             }
         }
-        int lr = 0;
         int rl = 0;
-
+        int lr = 0;
         for (int i = 0; i < 5; i++) {
             lr += board[i][i];
             rl += board[i][4 - i];
         }
-        if (lr == -5) {
-            count++;
+        if (rl == 0) {
+            bingo++;
         }
-        if (rl == -5) {
-            count++;
+        if (lr == 0) {
+            bingo++;
         }
+        return bingo;
     }
 }
-
