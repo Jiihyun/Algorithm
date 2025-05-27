@@ -32,20 +32,20 @@ public class Main {
         for (int i = 1; i < n + 1; i++) {
             if (!visited[i]) {
                 count++;
-                doDfs(i);
+                DFS(i);
             }
         }
         System.out.println(count);
     }
 
-    private static void doDfs(final int n) {
-        if (visited[n]) {
-            return;
-        }
+    private static void DFS(final int n) {
+//        if (visited[n]) {
+//            return;
+//        }
         visited[n] = true;
         for (int i : A[n]) {
             if (!visited[i]) {
-                doDfs(i);
+                DFS(i);
             }
         }
     }
