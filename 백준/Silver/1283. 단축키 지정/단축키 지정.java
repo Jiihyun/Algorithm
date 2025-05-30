@@ -12,45 +12,41 @@ public class Main {
         StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < size; i++) {
-            String[] words = br.readLine().split(" ");
+            String[] phrase = br.readLine().split(" ");
             boolean assigned = false;
 
-            for (int j = 0; j < words.length; j++) {
-                char firstChar = words[j].charAt(0);
-                char lower = Character.toLowerCase(firstChar);
+            for (int j = 0; j < phrase.length; j++) {
+                char ch = phrase[j].charAt(0);
+                char lower = Character.toLowerCase(ch);
                 if (!used.contains(lower)) {
                     used.add(lower);
-                    words[j] = "[" + firstChar + "]" + words[j].substring(1);
+                    phrase[j] = "[" + ch + "]" + phrase[j].substring(1);
                     assigned = true;
                     break;
                 }
             }
-
             if (!assigned) {
                 outer:
-                for (int j = 0; j < words.length; j++) {
-                    for (int k = 0; k < words[j].length(); k++) {
-                        char c = words[j].charAt(k);
-                        char lower = Character.toLowerCase(c);
+                for (int j = 0; j < phrase.length; j++) {
+                    for (int k = 0; k < phrase[j].length(); k++) {
+                        char ch = phrase[j].charAt(k);
+                        char lower = Character.toLowerCase(ch);
                         if (!used.contains(lower)) {
                             used.add(lower);
-                            words[j] = words[j].substring(0, k) + "[" + c + "]" + words[j].substring(k + 1);
-                            assigned = true;
+                            phrase[j] = phrase[j].substring(0, k) + "[" + ch + "]" + phrase[j].substring(k + 1);
                             break outer;
                         }
                     }
                 }
             }
-
-            for (int j = 0; j < words.length; j++) {
-                result.append(words[j]);
-                if (j != words.length - 1) {
+            for (int j = 0; j < phrase.length; j++) {
+                result.append(phrase[j]);
+                if (j != phrase.length - 1) {
                     result.append(" ");
                 }
             }
             result.append("\n");
         }
-
-        System.out.print(result);
+        System.out.println(result);
     }
 }
