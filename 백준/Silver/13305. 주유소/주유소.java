@@ -21,10 +21,10 @@ public class Main {
         }
 
         int minPrice = oilPrice[0];
-        int answer = 0;
+        long answer = 0;
         for (int i = 0; i < n - 1; i++) {
             minPrice = Math.min(minPrice, oilPrice[i]);
-            answer += minPrice * distance[i];
+            answer += (long) minPrice * distance[i];
         }
         System.out.println(answer);
     }
