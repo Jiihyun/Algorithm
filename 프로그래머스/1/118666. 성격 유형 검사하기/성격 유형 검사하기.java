@@ -24,11 +24,9 @@ class Solution {
         int score1 = map.getOrDefault(type1, 0);
         int score2 = map.getOrDefault(type2, 0);
         
-        if (score1 > score2) {
+        if (score1 >= score2) {
             return String.valueOf(type1);
-        } else if (score1 < score2) {
-            return String.valueOf(type2);
         } 
-        return type1 < type2 ? String.valueOf(type1) : String.valueOf(type2);
+        return String.valueOf(type2);
     }
 }
