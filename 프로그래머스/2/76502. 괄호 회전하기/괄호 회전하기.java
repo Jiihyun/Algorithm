@@ -11,16 +11,16 @@ class Solution {
                 if (ch == '(' || ch == '[' || ch == '{') {
                     st.push(ch);
                 } else {
-                    if (!st.isEmpty()) {
-                        Character c = st.peek();
-                        if (ch == ')' && c == '('
-                           || ch == ']' && c == '['
-                           || ch == '}' && c == '{') {
-                            st.pop();
-                        }
-                    } else {
+                    if (st.isEmpty()) {
                         isAnswer = false;
+                        break;
                     }
+                    Character c = st.peek();
+                    if (ch == ')' && c == '('
+                       || ch == ']' && c == '['
+                       || ch == '}' && c == '{') {
+                        st.pop();
+                    } 
                 }
             }
             if (st.isEmpty() && isAnswer) {
