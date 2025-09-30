@@ -9,30 +9,25 @@ class Solution {
             map.put(type, month);
         }
         
-        int todayDays = convertDateToDays(today);
-        List<Integer> result = new ArrayList<>();
-        
+        List<Integer> list = new ArrayList<>();
+        int todayDays = getDays(today);
         for (int i = 0; i < privacies.length; i++) {
-            String[] arr = privacies[i].split(" ");
-            String startDate = arr[0];
-            char type = arr[1].charAt(0);
-            
-            int termMonth = map.get(type);
-            int startDays = convertDateToDays(startDate);
-            int expireDays = startDays + termMonth * 28 - 1;
-            
-            if (expireDays < todayDays) {
-                result.add(i + 1);
-            }
+		        String[] arr = privacies[i].split(" ");
+		        int month = map.get(arr[1].charAt(0));
+		        int privacyDays = getDays(arr[0]);
+		        int actual = privacyDays + (28 * month - 1);
+		        if (actual < todayDays) {
+				        list.add(i+1);
+		        }
         }
-        
-        return result.stream().mapToInt(Integer::intValue).toArray();
+        return list.stream().mapToInt(Integer::intValue).toArray();
     }
     
-    private int convertDateToDays(String date) {
-        int y = Integer.parseInt(date.substring(0, 4));
-        int m = Integer.parseInt(date.substring(5, 7));
-        int d = Integer.parseInt(date.substring(8, 10));
-        return (y * 12 * 28) + (m * 28) + d;
+    private int getDays(String date) {
+		    String[] dateArr = date.split("\\.");
+		    int year = Integer.parseInt(dateArr[0]);
+		    int month = Integer.parseInt(dateArr[1]);
+		    int day = Integer.parseInt(dateArr[2]);
+		    return (year * 12 * 28) + (month * 28) + day;
     }
 }
