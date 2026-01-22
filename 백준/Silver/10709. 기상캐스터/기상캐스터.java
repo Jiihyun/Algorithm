@@ -8,40 +8,35 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         int h = Integer.parseInt(st.nextToken());
         int w = Integer.parseInt(st.nextToken());
+
         int[][] arr = new int[h][w];
+
         for (int i = 0; i < h; i++) {
-            String[] split = br.readLine().split("");
+            String line = br.readLine();
+            int lastCloud = -1;
             for (int j = 0; j < w; j++) {
-                if (split[j].equals("c")) {
+                if (line.charAt(j) == 'c') {
                     arr[i][j] = 0;
+                    lastCloud = j;
                 } else {
-                    arr[i][j] = -1;
+                    if (lastCloud == -1) {
+                        arr[i][j] = -1;
+                    } else {
+                        arr[i][j] = j - lastCloud;
+                    }
                 }
             }
         }
-        int count = 1;
-        for (int i = 0; i < h; i++) {
-            for (int j = 1; j < w; j++) {
-                int before = arr[i][j - 1];
-                if (before != -1 && before != 0 && arr[i][j] != 0) {
-                    arr[i][j] = count;
-                    count++;
-                }
-                if (before == 0 && arr[i][j] != 0) {
-                    count = 1;
-                    arr[i][j] = count;
-                    count++;
-                }
-            }
-        }
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
-                System.out.print(arr[i][j]);
-                System.out.print(" ");
+                sb.append(arr[i][j]).append(" ");
             }
-            System.out.println();
+            sb.append("\n");
         }
+        System.out.println(sb);
     }
 }
