@@ -1,8 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -18,14 +17,24 @@ public class Main {
             arr[i] = Integer.parseInt(st.nextToken());
         }
         int x = Integer.parseInt(br.readLine());
-        Set<Integer> set = new HashSet<>();
-        int count = 0;
 
-        for (int i = 0; i < n; i++) {
-            if (set.contains(x - arr[i])) {
+
+        int count = 0;
+        int left = 0;
+        int right = n - 1;
+        Arrays.sort(arr);
+
+        while (left < right) {
+            int sum = arr[left] + arr[right];
+            if (sum == x) {
                 count++;
+                left++;
+                right--;
+            } else if (sum < x) {
+                left++;
+            } else {
+                right--;
             }
-            set.add(arr[i]);
         }
         System.out.println(count);
     }
