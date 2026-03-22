@@ -1,61 +1,39 @@
-import java.util.*;
-
 class Solution {
     public String solution(String new_id) {
-        // 1단계: 소문자로
-        String lower = new_id.toLowerCase();
-
-        // 2단계: 허용된 문자만
+        new_id = new_id.toLowerCase();
+        new_id = new_id.replaceAll("[^a-z0-9-_.]", "");
         StringBuilder sb = new StringBuilder();
-        for (char c : lower.toCharArray()) {
-            if (isValidChar(c)) {
-                sb.append(c);
+        for (char c : new_id.toCharArray()) {
+            if (c == '.') {
+                if (sb.length() == 0 || sb.charAt(sb.length() - 1) == '.') {
+                    continue;
+                }
             }
-        }
-        String two = sb.toString();
-
-        // 3단계: .. → .
-        sb = new StringBuilder();
-        char prev = 0;
-        for (char c : two.toCharArray()) {
-            if (c == '.' && prev == '.') continue;
             sb.append(c);
-            prev = c;
         }
-        String three = sb.toString();
-
-        // 4단계: 양 끝 .
-        if (!three.isEmpty() && three.charAt(0) == '.') {
-            three = three.substring(1);
+        new_id = sb.toString();
+        
+        if (new_id.startsWith(".")) {
+            new_id = new_id.substring(1);
         }
-        if (!three.isEmpty() && three.charAt(three.length() - 1) == '.') {
-            three = three.substring(0, three.length() - 1);
+        if (new_id.endsWith(".")) {
+            new_id = new_id.substring(0, new_id.length() - 1);
         }
-
-        // 5단계: 빈 문자열 → "a"
-        if (three.isEmpty()) {
-            three = "a";
+        if (new_id.isEmpty()) {
+            new_id = "a";
         }
-
-        // 6단계: 길이 16 이상이면 자르기
-        if (three.length() >= 16) {
-            three = three.substring(0, 15);
-            if (three.charAt(three.length() - 1) == '.') {
-                three = three.substring(0, three.length() - 1);
+        if (new_id.length() >= 16) {
+            new_id = new_id.substring(0, 15);
+            if (new_id.endsWith(".")) {
+                new_id = new_id.substring(0, 14);
             }
         }
 
-        // 7단계: 길이 2 이하라면 마지막 문자 반복
-        while (three.length() < 3) {
-            three += three.charAt(three.length() - 1);
+        if (new_id.length() <= 2) {
+            while (new_id.length() < 3) {
+                new_id += new_id.charAt(new_id.length() - 1);
+            }
         }
-
-        return three;
-    }
-
-    private boolean isValidChar(char ch) {
-        return ('a' <= ch && ch <= 'z')
-            || ('0' <= ch && ch <= '9')
-            || (ch == '-' || ch == '_' || ch == '.');
+        return new_id;
     }
 }
