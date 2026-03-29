@@ -1,31 +1,28 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String input = br.readLine();
-        Stack<Character> stack = new Stack<>();
-
-        int result = 0;
-        for (int i = 0; i < input.length(); i++) {
-            if (input.charAt(i) == '(') {
+        String expression = br.readLine();
+        Deque<Character> stack = new ArrayDeque<>();
+        int count = 0;
+        char[] chars = expression.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '(') {
                 stack.push('(');
-                continue;
-            }
-            if (input.charAt(i) == ')') {
+            } else {
                 stack.pop();
-
-                if (input.charAt(i - 1) == '(') {
-                    result += stack.size();
+                if (chars[i - 1] == '(') {
+                    count += stack.size();
                 } else {
-                    result++;
+                    count += 1;
                 }
             }
         }
-        System.out.println(result);
+        System.out.println(count);
     }
 }
