@@ -11,7 +11,6 @@ public class Main {
     static boolean[][] visited;
     static int[] dy = {1, -1, 0, 0};
     static int[] dx = {0, 0, -1, 1};
-    static char[] color = {'G', 'B', 'R'};
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -27,17 +26,15 @@ public class Main {
             }
         }
         int count1 = 0;
-        for (int i = 0; i < 3; i++) {
-            char col = color[i];
-            for (int y = 0; y < n; y++) {
-                for (int x = 0; x < n; x++) {
-                    if (board[y][x] == col && !visited[y][x]) {
-                        bfs(y, x, col);
-                        count1++;
-                    }
+        for (int y = 0; y < n; y++) {
+            for (int x = 0; x < n; x++) {
+                if (!visited[y][x]) {
+                    bfs(y, x);
+                    count1++;
                 }
             }
         }
+
         visited = new boolean[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -47,21 +44,19 @@ public class Main {
             }
         }
         int count2 = 0;
-        for (int i = 0; i < 2; i++) {
-            char col = color[i];
-            for (int y = 0; y < n; y++) {
-                for (int x = 0; x < n; x++) {
-                    if (board[y][x] == col && !visited[y][x]) {
-                        bfs(y, x, col);
-                        count2++;
-                    }
+        for (int y = 0; y < n; y++) {
+            for (int x = 0; x < n; x++) {
+                if (!visited[y][x]) {
+                    bfs(y, x);
+                    count2++;
                 }
             }
+
         }
         System.out.println(count1 + " " + count2);
     }
 
-    private static void bfs(int y, int x, char col) {
+    private static void bfs(int y, int x) {
         Queue<int[]> queue = new LinkedList<>();
         queue.add(new int[]{y, x});
         visited[y][x] = true;
@@ -73,7 +68,7 @@ public class Main {
                 int nx = now[1] + dx[i];
 
                 if (ny >= 0 && ny < n && nx >= 0 && nx < n
-                        && board[ny][nx] == col && !visited[ny][nx]) {
+                        && board[ny][nx] == board[y][x] && !visited[ny][nx]) {
                     visited[ny][nx] = true;
                     queue.add(new int[]{ny, nx});
                 }
