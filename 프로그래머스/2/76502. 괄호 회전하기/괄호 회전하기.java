@@ -3,30 +3,40 @@ import java.util.*;
 class Solution {
     public int solution(String s) {
         int answer = 0;
+        String origin = s;
+        
         for (int i = 0; i < s.length(); i++) {
-            String rotated = s.substring(i) + s.substring(0, i);
-            Stack<Character> st = new Stack<>();
-            boolean isAnswer = true;
-            for (Character ch : rotated.toCharArray()) {
-                if (ch == '(' || ch == '[' || ch == '{') {
-                    st.push(ch);
-                } else {
-                    if (st.isEmpty()) {
-                        isAnswer = false;
-                        break;
-                    }
-                    Character c = st.peek();
-                    if (ch == ')' && c == '('
-                       || ch == ']' && c == '['
-                       || ch == '}' && c == '{') {
-                        st.pop();
-                    } 
+            s = origin.substring(i) + origin.substring(0,i);
+            
+            Deque<Character> stack = new ArrayDeque<>();
+            boolean isValid = true;
+            
+            for (Character ch: s.toCharArray()) {
+                if ( ch == '[' || ch == '(' || ch == '{') {
+                    stack.push(ch);
+                    continue;
                 }
+                if (stack.isEmpty()) {
+                    isValid = false;
+                    break;
+                }
+                if (stack.peek() == '(' && ch == ')') { 
+                    stack.pop();
+                } else if (stack.peek() == '{' && ch == '}') { 
+                    stack.pop();
+                } else if (stack.peek() == '[' && ch == ']') { 
+                    stack.pop();
+                } else {
+                    isValid = false;
+                    break;
+                }
+
             }
-            if (st.isEmpty() && isAnswer) {
+            if (isValid && stack.isEmpty()) {
                 answer++;
             }
         }
         return answer;
     }
 }
+
