@@ -3,19 +3,20 @@ import java.util.*;
 class Solution {
     public int solution(int[] people, int limit) {
         Arrays.sort(people);
-        int i = 0;
-        int j = people.length - 1;
-        int answer = 0;
-
-        while (i <= j) {
-            if (people[i] + people[j] <= limit) {
-                i++;
-                j--;
+        int count = 0;
+        int start = 0;
+        int last = people.length - 1;
+        
+        while (start <= last) {
+            if (people[start] + people[last] <= limit) {
+                count++;
+                last--;
+                start++;
             } else {
-                j--;
+                count++;
+                last--;
             }
-            answer++;
         }
-        return answer;
+        return count;
     }
 }
