@@ -2,33 +2,28 @@ import java.util.*;
 
 class Solution {
     
-    static Set<Integer> set;
     static boolean[] visited;
-    static String numbers;
+    static Set<Integer> nums = new HashSet<>();
     
     public int solution(String numbers) {
-        this.numbers = numbers;
-        set = new HashSet<>();
         visited = new boolean[numbers.length()];
-        dfs("");
-        
-        return set.size();
+        dfs("", numbers);  
+        return nums.size();
     }
     
-    private void dfs(String current) {
+    private void dfs(String current, String numbers) {
         if (!current.equals("")) {
             int num = Integer.parseInt(current);
             if (isPrime(num)) {
-                set.add(num);
+                nums.add(num);
             }
         }
-        
         for (int i = 0; i < numbers.length(); i++) {
             if (visited[i]) {
                 continue;
             }
             visited[i] = true;
-            dfs(current + numbers.charAt(i));
+            dfs(current + numbers.charAt(i), numbers);
             visited[i] = false;
         }
     }
@@ -37,7 +32,7 @@ class Solution {
         if (num < 2) {
             return false;
         }
-        for (int i = 2; i * i <= num; i++) {
+        for (int i = 2; i <= Math.sqrt(num); i++) {
             if (num % i == 0) {
                 return false;
             }
