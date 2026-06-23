@@ -1,21 +1,20 @@
+import java.util.*;
+
 class Solution {
     public int solution(int[][] sizes) {
-        int[][] arr = new int[sizes.length][2];
+        int maxGaro = 0;
+        int maxSero = 0;
+        
         for (int i = 0; i < sizes.length; i++) {
-            if (sizes[i][0] > sizes[i][1]) {
-                 arr[i][0] = sizes[i][0];
-                 arr[i][1] = sizes[i][1];
-            } else {
-                 arr[i][0] = sizes[i][1];
-                 arr[i][1] = sizes[i][0];
+            for (int j = 0; j < 2; j++) {
+                Arrays.sort(sizes[i]);
             }
         }
-        int maxW = 0;
-        int maxH = 0;
+        
         for (int i = 0; i < sizes.length; i++) {
-             maxW = Math.max(maxW, arr[i][0]);
-             maxH = Math.max(maxH, arr[i][1]);
+            maxGaro = Math.max(sizes[i][1], maxGaro);
+            maxSero = Math.max(sizes[i][0], maxSero);
         }
-        return maxW * maxH;
+        return maxSero * maxGaro;
     }
 }
