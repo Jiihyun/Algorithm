@@ -1,28 +1,40 @@
 import java.util.*;
 
 class Solution {
-    public int[] solution(int[] answers) {
-        int[] first = {1,2,3,4,5};
-        int[] second = {2,1,2,3,2,4,2,5};
-        int[] third = {3,3,1,1,2,2,4,4,5,5};
-        int[] score = {0,0,0};
-
-        for(int i=0; i<answers.length; i++) {
-            if(answers[i] == first[i%5]) score[0]++;
-            if(answers[i] == second[i%8]) score[1]++;
-            if(answers[i] == third[i%10]) score[2]++;
-        }
-
-        int max = Math.max(score[0], Math.max(score[1], score[2]));
-
-        List<Integer> answ = new ArrayList<Integer>();
-        for(int i=0; i<score.length; i++) if(max == score[i]) answ.add(i+1);
+    public List<Integer> solution(int[] answers) {
+        int[] a = new int[]{1,2,3,4,5};
+        int[] b = new int[]{2,1,2,3,2,4,2,5};
+        int[] c = new int[]{3,3,1,1,2,2,4,4,5,5};
         
-        int[] answer = new int[answ.size()];
-        for(int i=0; i<answ.size(); i++){
-            answer[i] = answ.get(i);
-        }
+        int answer1 = 0;
+        int answer2 = 0;
+        int answer3 = 0;
 
-        return answer;
+        for (int i = 0; i < answers.length; i++) {
+            if (answers[i] == a[i%a.length]) {
+                answer1++;
+            }
+            if (answers[i] == b[i%b.length]) {
+                answer2++;
+            }
+            if (answers[i] == c[i%c.length]) {
+                answer3++;
+            }
+        }
+        
+        int max = Math.max(answer3, Math.max(answer1, answer2));
+        List<Integer> list = new ArrayList<>();
+        
+        if (answer1 == max) {
+            list.add(1);
+        } 
+        if (answer2 == max) {
+            list.add(2);
+        }
+        if (answer3 == max) {
+            list.add(3);
+        }
+        
+        return list;
     }
 }
