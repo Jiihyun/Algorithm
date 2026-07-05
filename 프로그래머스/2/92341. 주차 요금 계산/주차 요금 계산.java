@@ -3,84 +3,67 @@ import java.util.*;
 class Solution {
 
     public int[] solution(int[] fees, String[] records) {
+        Map<String, Integer> inTimes = new HashMap<>();
+        Map<String, Integer> totalTimes = new HashMap<>();
 
-        Map<String, String> in = new TreeMap<>();
-        Map<String, Integer> totalTimes = new TreeMap<>();
+        for (String record : records) {
+            String[] infos = record.split(" ");
 
-        for (int i = 0; i < records.length; i++) {
-            String[] record = records[i].split(" ");
+            int time = convertMinute(infos[0]);
+            String car = infos[1];
+            String status = infos[2];
 
-            if (record[2].equals("IN")) {
-                in.put(record[1], record[0]);
+            if (status.equals("IN")) {
+                inTimes.put(car, time);
             } else {
-                String inTime = in.get(record[1]);
-
-                // 변경: calculate -> calculateTime
-                int parkingTime = calculateTime(inTime, record[0]);
+                int parkingTime = time - inTimes.remove(car);
 
                 totalTimes.put(
-                        record[1],
-                        totalTimes.getOrDefault(record[1], 0) + parkingTime
+                        car,
+                        totalTimes.getOrDefault(car, 0) + parkingTime
                 );
-
-                in.remove(record[1]);
             }
         }
 
-        // 출차 기록이 없는 차량 처리
-        for (String carNumber : in.keySet()) {
-            String inTime = in.get(carNumber);
-
-            // 변경: calculate -> calculateTime
-            int parkingTime = calculateTime(inTime, "23:59");
+        int endTime = convertMinute("23:59");
+        for (String car : inTimes.keySet()) {
+            int parkingTime = endTime - inTimes.get(car);
 
             totalTimes.put(
-                    carNumber,
-                    totalTimes.getOrDefault(carNumber, 0) + parkingTime
+                    car,
+                    totalTimes.getOrDefault(car, 0) + parkingTime
             );
         }
 
-        int[] answer = new int[totalTimes.size()];
+        List<String> cars = new ArrayList<>(totalTimes.keySet());
+        Collections.sort(cars);
 
-        int index = 0;
+        int[] answer = new int[cars.size()];
 
-        // 변경: valueSet() -> values()
-        for (int time : totalTimes.values()) {
-
-            // 변경: 기본 시간 이하 처리 추가
-            if (time <= fees[0]) {
-                answer[index] = fees[1];
-            } else {
-
-                // 변경:
-                // Math.ceil 대신 정수 연산 사용
-                // ceil(a / b) == (a + b - 1) / b
-
-                int extraTime = time - fees[0];
-                int unitCount = (extraTime + fees[2] - 1) / fees[2];
-
-                answer[index] = fees[1] + unitCount * fees[3];
-            }
-
-            index++;
+        for (int i = 0; i < cars.size(); i++) {
+            int totalTime = totalTimes.get(cars.get(i));
+            answer[i] = calculateFee(totalTime, fees);
         }
 
         return answer;
     }
 
-    public int calculateTime(String start, String end) {
+    private int convertMinute(String time) {
+        String[] t = time.split(":");
+        return Integer.parseInt(t[0]) * 60 + Integer.parseInt(t[1]);
+    }
 
-        String[] startTime = start.split(":");
-        String[] endTime = end.split(":");
+    private int calculateFee(int totalTime, int[] fees) {
+        int basicTime = fees[0];
+        int basicFee = fees[1];
+        int unitTime = fees[2];
+        int unitFee = fees[3];
 
-        int startMinute =
-                Integer.parseInt(startTime[0]) * 60
-                        + Integer.parseInt(startTime[1]);
+        if (totalTime <= basicTime) {
+            return basicFee;
+        }
 
-        int endMinute =
-                Integer.parseInt(endTime[0]) * 60
-                        + Integer.parseInt(endTime[1]);
-
-        return endMinute - startMinute;
+        return basicFee +
+                (int) Math.ceil((double) (totalTime - basicTime) / unitTime) * unitFee;
     }
 }
