@@ -1,69 +1,51 @@
 import java.util.*;
 
 class Solution {
-
     public int[] solution(int[] fees, String[] records) {
         Map<String, Integer> inTimes = new HashMap<>();
         Map<String, Integer> totalTimes = new HashMap<>();
-
-        for (String record : records) {
+        
+        for (String record: records) {
             String[] infos = record.split(" ");
-
-            int time = convertMinute(infos[0]);
+            String time = infos[0];
             String car = infos[1];
             String status = infos[2];
-
+            
             if (status.equals("IN")) {
-                inTimes.put(car, time);
+                inTimes.put(car, convertMinutes(time));
             } else {
-                int parkingTime = time - inTimes.remove(car);
-
+                int parkingTime = convertMinutes(time) - inTimes.remove(car);
                 totalTimes.put(
-                        car,
-                        totalTimes.getOrDefault(car, 0) + parkingTime
+                    car,
+                    totalTimes.getOrDefault(car, 0) + parkingTime
                 );
             }
         }
-
-        int endTime = convertMinute("23:59");
-        for (String car : inTimes.keySet()) {
-            int parkingTime = endTime - inTimes.get(car);
-
-            totalTimes.put(
+        
+        for(String car: inTimes.keySet()) {
+            int parkingTime = convertMinutes("23:59") - inTimes.get(car);
+                totalTimes.put(
                     car,
                     totalTimes.getOrDefault(car, 0) + parkingTime
-            );
+                );
         }
-
+        
         List<String> cars = new ArrayList<>(totalTimes.keySet());
         Collections.sort(cars);
-
         int[] answer = new int[cars.size()];
-
+        
         for (int i = 0; i < cars.size(); i++) {
-            int totalTime = totalTimes.get(cars.get(i));
-            answer[i] = calculateFee(totalTime, fees);
+            if (totalTimes.get(cars.get(i)) <= fees[0]) {
+                answer[i] = fees[1];
+            } else {
+                answer[i] = fees[1] + (int) Math.ceil((double) (totalTimes.get(cars.get(i)) - fees[0]) / fees[2]) * fees[3];
+            }
         }
-
         return answer;
     }
-
-    private int convertMinute(String time) {
-        String[] t = time.split(":");
-        return Integer.parseInt(t[0]) * 60 + Integer.parseInt(t[1]);
-    }
-
-    private int calculateFee(int totalTime, int[] fees) {
-        int basicTime = fees[0];
-        int basicFee = fees[1];
-        int unitTime = fees[2];
-        int unitFee = fees[3];
-
-        if (totalTime <= basicTime) {
-            return basicFee;
-        }
-
-        return basicFee +
-                (int) Math.ceil((double) (totalTime - basicTime) / unitTime) * unitFee;
+    
+    private int convertMinutes(String inTime) {
+        String[] times = inTime.split(":");
+        return Integer.parseInt(times[0]) * 60 + Integer.parseInt(times[1]);
     }
 }
