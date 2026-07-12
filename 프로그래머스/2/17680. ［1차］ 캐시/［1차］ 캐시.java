@@ -1,31 +1,27 @@
 import java.util.*;
 
 class Solution {
-    public int solution(int cacheSize, String[] cities) { 
-        int answer = 0;
-        Deque<String> dq = new ArrayDeque<>();
-        if (cacheSize == 0) {
-            answer = cities.length * 5;
-            return answer;
-        }
+    public int solution(int cacheSize, String[] cities) {
+        Queue<String> q = new LinkedList<>();
+        int time = 0;
         
         for (int i = 0; i < cities.length; i++) {
             String city = cities[i].toLowerCase();
-            if (dq.size() < cacheSize && !dq.contains(city)) {
-                dq.add(city);
-                answer += 5;
+            if (q.contains(city)) {
+                time += 1;
+                q.remove(city);
+                q.add(city);
+                
             } else {
-                 if (dq.contains(city)) {
-                    answer++;
-                    dq.remove(city);
-                    dq.add(city);
-                } else {
-                    if (!dq.isEmpty()) dq.removeFirst();
-                    dq.add(city);
-                    answer += 5;
-                }   
+                time += 5;
+                if (cacheSize > 0) {
+                    if (q.size() >= cacheSize) {
+                        q. poll();
+                    }
+                    q.add(city);
+                } 
             }
         }
-        return answer;
+        return time;
     }
 }
