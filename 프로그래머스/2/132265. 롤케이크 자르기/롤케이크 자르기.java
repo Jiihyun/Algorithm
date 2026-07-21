@@ -3,25 +3,24 @@ import java.util.*;
 class Solution {
     public int solution(int[] topping) {
         int answer = 0;
-        
-        Map<Integer, Integer> left = new HashMap<>();
-        Set<Integer> right = new HashSet<>();
-        
-        for (int i : topping) {
-            left.put(i, left.getOrDefault(i, 0) + 1);
+        Set<Integer> a = new HashSet<>();
+        Map<Integer, Integer> b = new HashMap<>();
+  
+        for (int i = 0; i < topping.length; i++) {
+            b.put(topping[i], b.getOrDefault(topping[i], 0) + 1);
         }
         
-        for (int i : topping) {
-            right.add(i);
-            left.put(i, left.get(i) - 1);
-            
-            if (left.get(i) == 0) {
-                left.remove(i);
+        for (int i = 0; i < topping.length; i++) {
+            a.add(topping[i]);
+            b.put(topping[i], b.getOrDefault(topping[i], 0) - 1);
+            if (b.get(topping[i]) == 0) {
+                b.remove(topping[i]);
             }
-            if (left.size() == right.size()) {
+            if (a.size() == b.size()) {
                 answer++;
             }
         }
+        
         return answer;
     }
 }
