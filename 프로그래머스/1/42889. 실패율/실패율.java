@@ -1,38 +1,57 @@
 import java.util.*;
 
 class Solution {
-    public int[] solution(int N, int[] stages) { 
-        int[] answer = new int[N];
-        int[] count = new int[N + 1];
-        Map<Integer, Double> map = new HashMap<>();
-        int total = stages.length;
+    public int[] solution(int N, int[] stages) {
 
-        for (int s : stages) {
-            if (s <= N) {
-                count[s]++;
+        int[] failPpl = new int[N+1];
+        for (int i = 1; i < N+1; i++) {
+            int count = 0;
+            for (int j = 0; j < stages.length; j++) {
+                if (stages[j] == i) {
+                    count++;
+                }
             }
+            failPpl[i] = count;
         }
+        
+        double[] failRate = new double[N+1];
+        int totalPpl = stages.length;
+        for (int i = 1; i <= N; i++) {
+            if (totalPpl == 0) {
+                failRate[i] = 0;
+            } else {
+                failRate[i] = (double) failPpl[i] / totalPpl;
+            }
+            totalPpl -= failPpl[i];
+        }
+        
+        List<Stage> list = new ArrayList<>();
 
         for (int i = 1; i <= N; i++) {
-            if (total == 0) {
-                map.put(i, 0.0);
-            } else {
-                map.put(i, (double) count[i] / total);
-                total -= count[i];
-            }
+            list.add(new Stage(i, failRate[i]));
         }
-        List<Map.Entry<Integer, Double>> list = new ArrayList<>(map.entrySet());
-        list.sort((a, b) -> {
-            int cmp = Double.compare(b.getValue(), a.getValue());
-            if (cmp == 0) {
-                return Integer.compare(a.getKey(), b.getKey());
+        
+        list.sort((a,b) -> {
+            if (a.rate == b.rate) {
+                return a.num - b.num;
             }
-            return cmp;
+            return Double.compare(b.rate, a.rate);
         });
-
+        
+        int[] answer = new int[N];
         for (int i = 0; i < N; i++) {
-            answer[i] = list.get(i).getKey();
+            answer[i] = list.get(i).num;
         }
         return answer;
+    }
+    
+    class Stage {
+        int num;
+        double rate;
+
+        Stage(int num, double rate) {
+            this.num = num;
+            this.rate = rate;
+        }
     }
 }
