@@ -2,19 +2,21 @@ import java.util.*;
 
 class Solution {
     public String solution(int[] numbers) {
-        StringBuilder sb = new StringBuilder();
-        String[] arr = new String[numbers.length];
+        List<String> sortedNums = new ArrayList<>();
+        
         for (int i = 0; i < numbers.length; i++) {
-            arr[i] = Integer.toString(numbers[i]);
+            String num = String.valueOf(numbers[i]);
+            sortedNums.add(num);
         }
-        Arrays.sort(arr, (o1, o2) -> (o2 + o1).compareTo(o1 + o2));
-        if (arr[0].equals("0")) {
-           return "0";
+        String answer = "";
+        
+        sortedNums.sort((a, b) -> (b + a).compareTo(a + b));
+        for (String num: sortedNums) {
+            answer += num;
         }
-
-        for (String s : arr) {
-            sb.append(s);
+        if (sortedNums.get(0).equals("0")) {
+            return "0";
         }
-        return sb.toString();
+        return answer;
     }
 }
