@@ -1,19 +1,14 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
     public int solution(int[] citations) {
-        Arrays.sort(citations);
         int n = citations.length;
-        int h = 0;
-        
+        Arrays.sort(citations);
         for (int i = 0; i < n; i++) {
-            int cite = citations[n - 1 - i];
-            if (cite >= i + 1) {
-                h = i + 1; 
-            } else {
-                break; 
+            if (citations[i] >= n - i) {
+                return n - i;
             }
         }
-        return h;
+        return 0;
     }
 }
