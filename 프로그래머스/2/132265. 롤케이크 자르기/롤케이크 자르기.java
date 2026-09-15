@@ -2,25 +2,26 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] topping) {
+        Map<Integer, Integer> left = new HashMap<>();
+        Map<Integer, Integer> right = new HashMap<>();
         int answer = 0;
-        Set<Integer> a = new HashSet<>();
-        Map<Integer, Integer> b = new HashMap<>();
-  
-        for (int i = 0; i < topping.length; i++) {
-            b.put(topping[i], b.getOrDefault(topping[i], 0) + 1);
-        }
         
         for (int i = 0; i < topping.length; i++) {
-            a.add(topping[i]);
-            b.put(topping[i], b.getOrDefault(topping[i], 0) - 1);
-            if (b.get(topping[i]) == 0) {
-                b.remove(topping[i]);
+            left.put(topping[i], left.getOrDefault(topping[i], 0) + 1);
+        }
+        
+        for (int i = topping.length - 1; i >= 0; i--) {
+            right.put(topping[i], right.getOrDefault(topping[i], 0) + 1);
+            left.put(topping[i], left.get(topping[i]) - 1);
+            
+            if (left.get(topping[i]) == 0) {
+                left.remove(topping[i]);
             }
-            if (a.size() == b.size()) {
+            
+            if (left.keySet().size() == right.keySet().size()) {
                 answer++;
             }
         }
-        
         return answer;
     }
 }
