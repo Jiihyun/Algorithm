@@ -3,55 +3,52 @@ import java.util.*;
 class Solution {
     public int[] solution(int N, int[] stages) {
 
-        int[] failPpl = new int[N+1];
-        for (int i = 1; i < N+1; i++) {
-            int count = 0;
-            for (int j = 0; j < stages.length; j++) {
-                if (stages[j] == i) {
-                    count++;
-                }
-            }
-            failPpl[i] = count;
-        }
-        
-        double[] failRate = new double[N+1];
-        int totalPpl = stages.length;
-        for (int i = 1; i <= N; i++) {
-            if (totalPpl == 0) {
-                failRate[i] = 0;
-            } else {
-                failRate[i] = (double) failPpl[i] / totalPpl;
-            }
-            totalPpl -= failPpl[i];
-        }
-        
-        List<Stage> list = new ArrayList<>();
+        Map<Integer, Integer> failPplCount = new HashMap<>();
 
         for (int i = 1; i <= N; i++) {
-            list.add(new Stage(i, failRate[i]));
+            failPplCount.put(i, 0);
         }
-        
-        list.sort((a,b) -> {
-            if (a.rate == b.rate) {
-                return a.num - b.num;
+
+        for (int i = 0; i < stages.length; i++) {
+            failPplCount.put(
+                stages[i],
+                failPplCount.getOrDefault(stages[i], 0) + 1
+            );
+        }
+
+        int now = stages.length;
+        double[] failPercent = new double[N];
+
+        for (int i = 0; i < N; i++) {
+            if (now == 0) {
+                failPercent[i] = 0.0;
+            } else {
+                failPercent[i] =
+                    (double) failPplCount.get(i + 1) / now;
             }
-            return Double.compare(b.rate, a.rate);
+            now -= failPplCount.get(i + 1);
+        }
+
+        Map<Integer, Double> ans = new HashMap<>();
+        for (int i = 0; i < N; i++) {
+            ans.put(i + 1, failPercent[i]);
+        }
+
+        List<Map.Entry<Integer, Double>> list =
+            new ArrayList<>(ans.entrySet());
+
+        list.sort((a, b) -> {
+            if (Double.compare(a.getValue(), b.getValue()) == 0) {
+                return Integer.compare(a.getKey(), b.getKey());
+            }
+
+            return Double.compare(b.getValue(), a.getValue());
         });
-        
+
         int[] answer = new int[N];
         for (int i = 0; i < N; i++) {
-            answer[i] = list.get(i).num;
+            answer[i] = list.get(i).getKey();
         }
         return answer;
-    }
-    
-    class Stage {
-        int num;
-        double rate;
-
-        Stage(int num, double rate) {
-            this.num = num;
-            this.rate = rate;
-        }
     }
 }
