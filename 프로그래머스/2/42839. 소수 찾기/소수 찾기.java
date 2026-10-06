@@ -1,42 +1,54 @@
 import java.util.*;
 
 class Solution {
-    
-    static boolean[] visited;
-    static Set<Integer> nums = new HashSet<>();
-    
+
+    static boolean[] used;
+    static Set<Integer> answer;
+
     public int solution(String numbers) {
-        visited = new boolean[numbers.length()];
-        dfs("", numbers);  
-        return nums.size();
-    }
-    
-    private void dfs(String current, String numbers) {
-        if (!current.equals("")) {
-            int num = Integer.parseInt(current);
-            if (isPrime(num)) {
-                nums.add(num);
-            }
+        answer = new HashSet<>();
+        used = new boolean[numbers.length()];
+
+        String[] numberArr = numbers.split("");
+        int[] nums = new int[numbers.length()];
+
+        for (int i = 0; i < numberArr.length; i++) {
+            nums[i] = Integer.parseInt(numberArr[i]);
         }
-        for (int i = 0; i < numbers.length(); i++) {
-            if (visited[i]) {
+
+        dfs("", nums);
+        return answer.size();
+    }
+
+    private void dfs(String current, int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            if (used[i]) {
                 continue;
             }
-            visited[i] = true;
-            dfs(current + numbers.charAt(i), numbers);
-            visited[i] = false;
+            used[i] = true;
+
+            String next = current + nums[i];
+            int number = Integer.parseInt(next);
+
+            if (isPrime(number)) {
+                answer.add(number);
+            }
+            dfs(next, nums);
+            used[i] = false;
         }
     }
-    
+
     private boolean isPrime(int num) {
         if (num < 2) {
             return false;
         }
+
         for (int i = 2; i <= Math.sqrt(num); i++) {
             if (num % i == 0) {
                 return false;
             }
         }
+
         return true;
     }
 }
